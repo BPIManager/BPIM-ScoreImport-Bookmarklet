@@ -59,11 +59,25 @@ const main = class Main extends Express {
       const hash = detail.body.hash;
       console.log(hash, "https://bpi.poyashi.me/data/" + hash);
       this.updateProgressText("BPIManager に移動しています");
-      window.location.href = "https://bpi.poyashi.me/data/" + hash;
-    } catch(e) {
+      window.open("https://bpi.poyashi.me/data/" + hash);
+      this.completed();
+    } catch (e) {
       console.log(e);
       alert("一時データの転送中にエラーが発生しました。管理者に連絡してください。");
     }
+  }
+
+  completed() {
+    window.document.body.innerHTML = `
+      <div style="text-align:center;display:flex;justify-content:center;align-items:center;flex-direction:column;height:100vh;background:#fff;overflow:hidden;" id="bpim-completed-view">
+        <h1 style="display:inherit !important;">処理が完了しました</h1>
+        <p>別ウィンドウで BPIManager を開いています。</p>
+        <p>もしくは、下記ボックスに表示されたテキストを直接インポート画面で利用してください。</p>
+        <textarea style="width:80%;height:180px;margin:6px 0;border:1px solid #ccc;padding:6px;" id="bpim_completed_text"></textarea>
+        <p>別ウィンドウで BPIManager が表示されない場合、ポップアップブロックの設定をご確認下さい。</p>
+      </div>
+    `;
+    window.document.getElementById("bpim_completed_text")!.innerText = JSON.stringify(this.result);
   }
 };
 

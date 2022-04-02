@@ -39,16 +39,16 @@ const main = class Main extends Express {
                 return alert("Script loaded on unknown device");
             }
             if (document.domain.indexOf("eagate.573.jp") === -1) {
-                return alert("å¯¾å¿œå¤–ã®ãƒšãƒ¼ã‚¸ã§ã™ã€‚");
+                return alert("‘Î‰ŠO‚Ìƒy[ƒW‚Å‚·B");
             }
             document.body.innerHTML = this.scrapingView;
             console.log("BPIManager score import bookmarklet available at: https://github.com/BPIManager");
-            this.updateProgressText("é–‹å§‹ã—ã¦ã„ã¾ã™");
+            this.updateProgressText("ŠJn‚µ‚Ä‚¢‚Ü‚·");
             yield this.wait(500);
             for (let i = 0; i < 2; ++i) {
                 for (let j = 0; j < 13; ++j) {
                     this.getter.setDiff(i === 0 ? 10 : 11).setOffset(j);
-                    this.updateProgressText("â˜†" + (i === 0 ? "11" : "12") + " / " + Number(j + 1) + "ãƒšãƒ¼ã‚¸ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã¾ã™");
+                    this.updateProgressText("™" + (i === 0 ? "11" : "12") + " / " + Number(j + 1) + "ƒy[ƒW‚ğ“Ç‚İ‚ñ‚Å‚¢‚Ü‚·");
                     const body = yield this.getter.get();
                     const b = this.scraper.setRawBody(body).exec();
                     this.result = this.result.concat(b);
@@ -59,19 +59,38 @@ const main = class Main extends Express {
     }
     uploadToServer() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.updateProgressText("ã‚µãƒ¼ãƒãƒ¼ã«ä¸€æ™‚ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ã—ã¦ã„ã¾ã™");
-            console.log(this.result);
-            yield this.wait(1000);
-            const res = yield fetch("https://proxy.poyashi.me/bpim/api/v1/bookmarklet/add", {
-                method: "POST",
-                body: JSON.stringify(this.result),
-            });
-            const detail = yield res.json();
-            const hash = detail.body.hash;
-            console.log(hash, "https://bpi.poyashi.me/data/" + hash);
-            this.updateProgressText("BPIManager ã«ç§»å‹•ã—ã¦ã„ã¾ã™");
-            window.location.href = "https://bpi.poyashi.me/data/" + hash;
+            try {
+                this.updateProgressText("ƒT[ƒo[‚Éˆêƒf[ƒ^‚ğ•Û‘¶‚µ‚Ä‚¢‚Ü‚·");
+                console.log(this.result);
+                yield this.wait(1000);
+                const res = yield fetch("https://proxy.poyashi.me/bpim/api/v1/bookmarklet/add", {
+                    method: "POST",
+                    body: JSON.stringify(this.result),
+                });
+                const detail = yield res.json();
+                const hash = detail.body.hash;
+                console.log(hash, "https://bpi.poyashi.me/data/" + hash);
+                this.updateProgressText("BPIManager ‚ÉˆÚ“®‚µ‚Ä‚¢‚Ü‚·");
+                window.open("https://bpi.poyashi.me/data/" + hash);
+                this.completed();
+            }
+            catch (e) {
+                console.log(e);
+                alert("ˆêƒf[ƒ^‚Ì“]‘—’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BŠÇ—Ò‚É˜A—‚µ‚Ä‚­‚¾‚³‚¢B");
+            }
         });
+    }
+    completed() {
+        window.document.body.innerHTML = `
+      <div style="text-align:center;display:flex;justify-content:center;align-items:center;flex-direction:column;height:100vh;background:#fff;overflow:hidden;" id="bpim-completed-view">
+        <h1 style="display:inherit !important;">ˆ—‚ªŠ®—¹‚µ‚Ü‚µ‚½</h1>
+        <p>•ÊƒEƒBƒ“ƒhƒE‚Å BPIManager ‚ğŠJ‚¢‚Ä‚¢‚Ü‚·B</p>
+        <p>‚à‚µ‚­‚ÍA‰º‹Lƒ{ƒbƒNƒX‚É•\¦‚³‚ê‚½ƒeƒLƒXƒg‚ğ’¼ÚƒCƒ“ƒ|[ƒg‰æ–Ê‚Å—˜—p‚µ‚Ä‚­‚¾‚³‚¢B</p>
+        <textarea style="width:80%;height:180px;margin:6px 0;border:1px solid #ccc;padding:6px;" id="bpim_completed_text"></textarea>
+        <p>•ÊƒEƒBƒ“ƒhƒE‚Å BPIManager ‚ª•\¦‚³‚ê‚È‚¢ê‡Aƒ|ƒbƒvƒAƒbƒvƒuƒƒbƒN‚Ìİ’è‚ğ‚²Šm”F‰º‚³‚¢B</p>
+      </div>
+    `;
+        window.document.getElementById("bpim_completed_text").innerText = JSON.stringify(this.result);
     }
 };
 const getter = class Getter {
